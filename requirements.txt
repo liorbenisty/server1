@@ -2,4 +2,4 @@ imbalanced-learn
 scikit-learn
 pandas
 joblib
-    
+xgboost
