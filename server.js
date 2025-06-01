@@ -4,7 +4,15 @@ const { google } = require('googleapis');
 const cors = require('cors');
 
 const app = express();
-app.use(cors());
+// Update this in your server.js
+const corsOptions = {
+  origin: ['http://localhost:3000', 'https://harmony-net-v2.onrender.com'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+  optionsSuccessStatus: 204
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 
 // Google Sheets setup
@@ -200,24 +208,24 @@ app.post('/add-employee-line', async (req, res) => {
         // Extract features in the correct order for the Python script
         const featuresForPrediction = [
             employeeData.monthlyIncome,             // 0
-    employeeData.overTime,                  // 1 - Keep as "Yes"/"No"
-    employeeData.age,                       // 2
-    employeeData.totalWorkingYears,         // 3
-    employeeData.dailyRate,                 // 4
-    employeeData.yearsAtCompany,            // 5
-    employeeData.monthlyRate,               // 6
-    employeeData.hourlyRate,                // 7
-    employeeData.distanceFromHome,          // 8
-    employeeData.stockOptionLevel,          // 9
-    employeeData.yearsWithCurrManager,      // 10
-    employeeData.percentSalaryHike,         // 11
-    employeeData.yearsInCurrentRole,        // 12
-    employeeData.numCompaniesWorked,        // 13
-    employeeData.jobSatisfaction,           // 14
-    employeeData.workLifeBalance,           // 15
-    employeeData.environmentSatisfaction,   // 16
-    employeeData.jobInvolvement,            // 17
-    employeeData.jobRole                    // 18 - Use exact case (e.g., "Sales Executive")
+            employeeData.overTime,                  // 1 - Keep as "Yes"/"No"
+            employeeData.age,                       // 2
+            employeeData.totalWorkingYears,         // 3
+            employeeData.dailyRate,                 // 4
+            employeeData.yearsAtCompany,            // 5
+            employeeData.monthlyRate,               // 6
+            employeeData.hourlyRate,                // 7
+            employeeData.distanceFromHome,          // 8
+            employeeData.stockOptionLevel,          // 9
+            employeeData.yearsWithCurrManager,      // 10
+            employeeData.percentSalaryHike,         // 11
+            employeeData.yearsInCurrentRole,        // 12
+            employeeData.numCompaniesWorked,        // 13
+            employeeData.jobSatisfaction,           // 14
+            employeeData.workLifeBalance,           // 15
+            employeeData.environmentSatisfaction,   // 16
+            employeeData.jobInvolvement,            // 17
+            employeeData.jobRole                    // 18 - Use exact case (e.g., "Sales Executive")
         ];
 
         // Convert boolean/string values to numeric where needed
@@ -236,7 +244,7 @@ app.post('/add-employee-line', async (req, res) => {
             const sheetData = [
                 "=IMAGE('https://randomuser.me/api/portraits/" & IF(M1488="Male", "men", "women") & "/" & MOD(ROW(), 100) & ".jpg')",
                 employeeData.age,
-                employeeData.age,                prediction, // Attrition prediction
+                prediction, // Attrition prediction
                 employeeData.businessTravel,
                 employeeData.dailyRate,
                 employeeData.department,
@@ -271,7 +279,7 @@ app.post('/add-employee-line', async (req, res) => {
                 employeeData.yearsSinceLastPromotion,
                 employeeData.yearsWithCurrManager,
                 "FullName",
-                "=HYPERLINK('https://script.google.com/macros/s/AKfycby6Tv6jmcXP3elLe3EhTewkROpagETpSOck94TjFEzWdoo88ClSCLr1KPCWQK2IzMLQ/exec?row=3", "❌ Delete')"
+                "=HYPERLINK('https://script.google.com/macros/s/AKfycby6Tv6jmcXP3elLe3EhTewkROpagETpSOck94TjFEzWdoo88ClSCLr1KPCWQK2IzMLQ/exec?row=" & ROW(), "❌ Delete')"
             ];
 
             try {
