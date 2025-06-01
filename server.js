@@ -4,15 +4,8 @@ const { google } = require('googleapis');
 const cors = require('cors');
 
 const app = express();
-// Update this in your server.js
-const corsOptions = {
-  origin: ['http://localhost:3000', 'https://harmony-net-v2.onrender.com'],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true,
-  optionsSuccessStatus: 204
-};
-
-app.use(cors(corsOptions));app.use(express.json());
+app.use(cors());
+app.use(express.json());
 
 // Google Sheets setup
 const auth = new google.auth.GoogleAuth({
@@ -278,7 +271,8 @@ app.post('/add-employee-line', async (req, res) => {
                 employeeData.yearsSinceLastPromotion,
                 employeeData.yearsWithCurrManager,
                 "FullName",
-            '=HYPERLINK("https://script.google.com/macros/s/AKfycby6Tv6jmcXP3elLe3EhTewkROpagETpSOck94TjFEzWdoo88ClSCLr1KPCWQK2IzMLQ/exec?row=" & ROW(), "❌ Delete")'            ];
+                "=HYPERLINK('https://script.google.com/macros/s/AKfycby6Tv6jmcXP3elLe3EhTewkROpagETpSOck94TjFEzWdoo88ClSCLr1KPCWQK2IzMLQ/exec?row=3", "❌ Delete')"
+            ];
 
             try {
                 const response = await sheets.spreadsheets.values.append({
