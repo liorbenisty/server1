@@ -271,7 +271,7 @@ app.post('/add-employee-line', async (req, res) => {
                 employeeData.yearsSinceLastPromotion,
                 employeeData.yearsWithCurrManager,
                 "FullName",
-                "=HYPERLINK('https://script.google.com/macros/s/AKfycby6Tv6jmcXP3elLe3EhTewkROpagETpSOck94TjFEzWdoo88ClSCLr1KPCWQK2IzMLQ/exec?row=3", "❌ Delete')"
+                `=HYPERLINK("https://script.google.com/macros/s/AKfycby6Tv6jmcXP3elLe3EhTewkROpagETpSOck94TjFEzWdoo88ClSCLr1KPCWQK2IzMLQ/exec?row=3", "❌ Delete")`
             ];
 
             try {
