@@ -135,7 +135,12 @@ app.get('/add-test-line', async (req, res) => {
             testData[33], // YearsWithCurrManager (3)
             testData[22], // PercentSalaryHike (15)
             testData[31], // YearsInCurrentRole (3)
-            testData[19]  // NumCompaniesWorked (3)
+            testData[19], // NumCompaniesWorked (3)
+            testData[15], // JobSatisfaction (new)
+            testData[29], // WorkLifeBalance (new)
+            testData[12],  // EnvironmentSatisfaction (new)
+            testData[15], // JobInvolvement (new)
+            testData[17]  // JobRole (new)
         ];
 
         // Convert boolean/string values to numeric where needed
@@ -194,24 +199,29 @@ app.post('/add-employee-line', async (req, res) => {
         
         // Extract features in the correct order for the Python script
         const featuresForPrediction = [
-            employeeData.monthlyIncome,
-            employeeData.overTime,
-            employeeData.age,
-            employeeData.totalWorkingYears,
-            employeeData.dailyRate,
-            employeeData.yearsAtCompany,
-            employeeData.monthlyRate,
-            employeeData.hourlyRate,
-            employeeData.distanceFromHome,
-            employeeData.stockOptionLevel,
-            employeeData.yearsWithCurrManager,
-            employeeData.percentSalaryHike,
-            employeeData.yearsInCurrentRole,
-            employeeData.numCompaniesWorked
+            employeeData.monthlyIncome,             // 0
+            employeeData.overTime,                  // 1 - Keep as "Yes"/"No"
+            employeeData.age,                       // 2
+            employeeData.totalWorkingYears,         // 3
+            employeeData.dailyRate,                 // 4
+            employeeData.yearsAtCompany,            // 5
+            employeeData.monthlyRate,               // 6
+            employeeData.hourlyRate,                // 7
+            employeeData.distanceFromHome,          // 8
+            employeeData.stockOptionLevel,          // 9
+            employeeData.yearsWithCurrManager,      // 10
+            employeeData.percentSalaryHike,         // 11
+            employeeData.yearsInCurrentRole,        // 12
+            employeeData.numCompaniesWorked,        // 13
+            employeeData.jobSatisfaction,           // 14
+            employeeData.workLifeBalance,           // 15
+            employeeData.environmentSatisfaction,   // 16
+            employeeData.jobInvolvement,            // 17
+            employeeData.jobRole                    // 18 - Use exact case (e.g., "Sales Executive")
         ];
 
         // Convert boolean/string values to numeric where needed
-        featuresForPrediction[1] = featuresForPrediction[1] === 'Yes' ? 1 : 0; // Convert OverTime to numeric
+        //featuresForPrediction[1] = featuresForPrediction[1] === 'Yes' ? 1 : 0; // Convert OverTime to numeric
 
         // Call Python script to predict Attrition
         const { execFile } = require('child_process');
@@ -224,6 +234,7 @@ app.post('/add-employee-line', async (req, res) => {
 
             // Prepare the data array in the correct order for the sheet
             const sheetData = [
+                 `=IMAGE("https://randomuser.me/api/portraits/" & IF(M1489="Male", "men", "women") & "/" & MOD(ROW(), 100) & ".jpg")`,
                 employeeData.age,
                 prediction, // Attrition prediction
                 employeeData.businessTravel,
@@ -258,7 +269,9 @@ app.post('/add-employee-line', async (req, res) => {
                 employeeData.yearsAtCompany,
                 employeeData.yearsInCurrentRole,
                 employeeData.yearsSinceLastPromotion,
-                employeeData.yearsWithCurrManager
+                employeeData.yearsWithCurrManager,
+                employeeData.fullName,
+                `=HYPERLINK("https://script.google.com/macros/s/AKfycby6Tv6jmcXP3elLe3EhTewkROpagETpSOck94TjFEzWdoo88ClSCLr1KPCWQK2IzMLQ/exec?row=3", "❌ Delete")`
             ];
 
             try {
@@ -297,7 +310,7 @@ app.post('/add-employee-line', async (req, res) => {
     }
 });
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
     console.log(`Test the connection at: http://localhost:${PORT}/test-connection`);
