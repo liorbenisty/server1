@@ -270,7 +270,7 @@ app.post('/add-employee-line', async (req, res) => {
                 employeeData.yearsInCurrentRole,
                 employeeData.yearsSinceLastPromotion,
                 employeeData.yearsWithCurrManager,
-                "FullName",
+                employeeData.fullName,
                 `=HYPERLINK("https://script.google.com/macros/s/AKfycby6Tv6jmcXP3elLe3EhTewkROpagETpSOck94TjFEzWdoo88ClSCLr1KPCWQK2IzMLQ/exec?row=3", "❌ Delete")`
             ];
 
